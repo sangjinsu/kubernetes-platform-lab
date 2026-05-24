@@ -4,7 +4,7 @@
 
 권장 문서:
 
-- `phase-01-local-kubernetes.md`
+- `phase-01-local-kubernetes.md`: Chapter 1. 로컬 kind 클러스터와 echo 앱 배포 기본 루프
 - `phase-02-networking.md`
 - `phase-03-gitops-delivery.md`
 - `phase-04-security.md`

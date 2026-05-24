@@ -16,6 +16,10 @@ Kubernetes 플랫폼 엔지니어링 핵심 기술을 로컬 kind/Colima 환경�
 ./scripts/create-kind-cluster.sh
 ```
 
+Chapter 1 문서를 따라 echo 앱을 배포하고 기본 kubectl 루프를 익힌다.
+
+- [Chapter 1. 로컬 Kubernetes 기본](docs/phase-01-local-kubernetes.md)
+
 랩을 만든 뒤 표준 구조와 shell syntax를 확인한다.
 
 ```bash
@@ -50,6 +54,7 @@ Kubernetes 플랫폼 엔지니어링 핵심 기술을 로컬 kind/Colima 환경�
 
 ## 첫 학습 순서
 
+0. `docs/phase-01-local-kubernetes.md`
 1. `labs/local-cilium`
 2. `labs/local-gateway-api`
 3. `labs/local-argocd`
@@ -89,6 +94,12 @@ manifest를 추가한 랩에서는 kubeconform을 사용한다.
 
 ```bash
 kubeconform -strict -summary labs/local-example/manifests/
+```
+
+Chapter 1 echo manifest를 검증한다.
+
+```bash
+kubeconform -strict -summary apps/echo/manifests/
 ```
 
 Helm chart를 추가한 랩에서는 lint와 렌더링 검증을 함께 수행한다.
