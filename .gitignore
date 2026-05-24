@@ -1,0 +1,48 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+.tmp/
+*.tmp
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+.secrets/
+
+# Kubernetes local credentials
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+.kube/
+
+# Terraform local state
+**/.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+
+# Tool caches
+.cache/
+.pytest_cache/
+node_modules/
+
+# OMC / local agent runtime state
+.omc/state/
+.omc/logs/
