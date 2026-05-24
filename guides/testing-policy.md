@@ -54,29 +54,29 @@ argocd app sync sample-app
 
 ## Terraform/Terragrunt 검증
 
-Terraform 단독 랩에서는 plan 중심으로 검증한다.
+Terraform 단독 랩에서는 AWS provider 없이 비용 없는 static validation 중심으로 검증한다.
 
 ```bash
 terraform fmt -check -recursive
 terraform validate
-terraform plan
 ```
 
-Terragrunt 랩에서는 HCL 검증과 plan 중심으로 검증한다.
+Terragrunt 랩에서는 HCL 검증 중심으로 검증한다.
 
 ```bash
 terragrunt hcl fmt --check
 terragrunt hcl validate
-terragrunt run plan
 ```
 
-여러 unit을 함께 확인해야 할 때만 `--all`을 사용한다.
+AWS provider나 유료 리소스를 만들 수 있는 provider가 없는 local-only 예제에서만 plan을 사용한다.
 
 ```bash
+terraform plan
+terragrunt run plan
 terragrunt run --all plan
 ```
 
-`terraform apply`, `terragrunt run apply`, `terragrunt run --all apply`, `destroy` 계열 명령은 사용자의 명시적 요청 없이 실행 대상으로 작성하지 않는다.
+`terraform apply`, `terragrunt run apply`, `terragrunt run --all apply`, `destroy` 계열 명령은 사용자의 명시적 비용 승인 없이 실행 대상으로 작성하지 않는다.
 
 ## 랩 스캐폴드 검증
 

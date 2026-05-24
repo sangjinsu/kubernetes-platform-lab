@@ -28,6 +28,7 @@
 
 ## 후속 반영: Terragrunt
 
-- Terraform cloud 랩과 Karpenter 랩을 확장할 수 있도록 Terragrunt 학습 주제를 추가한다.
+- 비용 제약 때문에 AWS 실행 랩은 만들지 않고, Terraform/Terragrunt는 로컬 validation 중심으로 학습한다.
+- Karpenter는 AWS 실행 없이 개념/설계 문서로만 다룬다.
 - 기본 검증 명령은 `terragrunt hcl fmt --check`, `terragrunt hcl validate`, `terragrunt run plan`, `terragrunt run --all plan` 중심으로 둔다.
-- `terragrunt run apply`, `terragrunt run --all apply`, `destroy` 계열 명령은 사용자의 명시적 요청 없이는 실행 대상으로 작성하지 않는다.
+- `terragrunt run apply`, `terragrunt run --all apply`, `destroy` 계열 명령은 사용자의 명시적 비용 승인 없이는 실행 대상으로 작성하지 않는다.

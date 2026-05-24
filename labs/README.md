@@ -16,4 +16,4 @@ labs/local-example
 └── tests
 ```
 
-로컬 실습은 `labs/local-*`, AWS 비용이 발생할 수 있는 실습은 `labs/cloud-*` 아래에만 작성한다.
+로컬 실습은 `labs/local-*` 아래에 작성한다. AWS/EKS/Karpenter는 비용 제약 때문에 실행 랩으로 만들지 않고, 필요한 경우 `docs/` 아래 개념/설계 문서로만 작성한다.

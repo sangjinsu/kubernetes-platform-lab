@@ -27,9 +27,7 @@
 │   ├── local-cert-manager
 │   ├── local-observability
 │   ├── local-hpa
-│   ├── local-keda
-│   ├── cloud-aws-terraform-terragrunt
-│   └── cloud-aws-karpenter
+│   └── local-keda
 ├── scripts
 │   ├── create-kind-cluster.sh
 │   ├── delete-kind-cluster.sh
@@ -79,16 +77,17 @@ labs/local-example
 - manifest는 가능한 한 작게 유지한다.
 - 실습용 이미지는 공식 nginx, curlimages/curl, hashicorp/http-echo 등 검증 쉬운 이미지를 우선한다.
 - Helm values는 기본값 전체 복사 대신 필요한 값만 작성한다.
-- Terraform은 module과 variable을 명확히 분리한다.
-- Terragrunt는 공통 설정과 environment별 unit을 분리하고, 기본 검증은 `plan` 중심으로 작성한다.
+- Terraform은 module과 variable을 명확히 분리하고, 기본 예제는 비용 없는 provider 또는 static validation 중심으로 작성한다.
+- Terragrunt는 공통 설정과 environment별 unit을 분리하고, 기본 검증은 HCL validation 중심으로 작성한다.
 - README에는 실행 순서와 예상 결과를 함께 적는다.
 
-## Terragrunt 랩 표준 구성
+## Terragrunt 문서 표준 구성
 
-Terragrunt를 사용하는 `labs/cloud-*` 디렉터리는 다음 구조를 우선한다.
+Terragrunt를 다루는 문서는 AWS 실행 랩이 아니라 `docs/` 아래 비용 없는 IaC 구조 학습으로 작성한다.
 
 ```text
-labs/cloud-aws-example
+docs/terraform-terragrunt-local-validation.md
+examples/terraform-terragrunt
 ├── README.md
 ├── modules
 │   └── example
@@ -104,18 +103,18 @@ labs/cloud-aws-example
     └── cleanup.md
 ```
 
-Terragrunt 랩 README는 다음 내용을 반드시 포함한다.
+Terragrunt 문서는 다음 내용을 반드시 포함한다.
 
-1. 비용 발생 가능성
-2. AWS/EKS 사전 조건
+1. AWS/EKS를 사용하지 않는다는 전제
+2. 비용 없는 provider 또는 static validation 범위
 3. module과 live 디렉터리 역할
 4. `terragrunt.hcl`과 `root.hcl` 관계
 5. dependency 구성
 6. `terragrunt hcl fmt` 또는 CI 검증용 `terragrunt hcl fmt --check`
 7. `terragrunt hcl validate`
-8. `terragrunt run plan` 또는 `terragrunt run --all plan`
+8. provider 비용이 없는 경우에만 `terraform plan` 또는 `terragrunt run plan`
 9. apply/destroy를 실행하지 않는 기본 정책
-10. 명시적 승인 후 정리 절차
+10. AWS 비용 승인 전에는 cloud provider 예제를 실행하지 않는다는 주의
 
 ## 요청 예시
 
@@ -150,38 +149,37 @@ Cilium Gateway API를 사용하고 /app-a, /app-b path routing 테스트를 포�
 - app-a/app-b sample deployment
 - curl 기반 검증 스크립트
 
-### Karpenter 랩 설계
+### Karpenter 개념 문서 설계
 
 ```text
-AGENTS.md 기준으로 labs/cloud-aws-karpenter 랩을 설계해줘.
-실제 apply는 하지 않고 Terraform, Helm values, NodePool, EC2NodeClass, 검증 절차만 작성해줘.
+AGENTS.md 기준으로 docs/karpenter-concepts.md 문서를 설계해줘.
+AWS 실행 없이 Karpenter 개념, NodePool, EC2NodeClass, NodeClaim, HPA/KEDA와의 차이를 정리해줘.
 ```
 
 기대 산출물:
 
-- 비용 주의 문구
-- EKS 사전 조건
-- Terraform 변수 예시
-- Karpenter 설치 절차
-- NodePool / EC2NodeClass manifest
-- inflate deployment
-- NodeClaim 검증 명령
-- cleanup 순서
+- AWS 비용 제약 문구
+- Karpenter가 해결하는 문제
+- Cluster Autoscaler와의 차이
+- NodePool / EC2NodeClass / NodeClaim 관계
+- consolidation과 비용 최적화 개념
+- HPA/KEDA와의 역할 비교
+- 로컬에서 대체로 실습할 수 있는 주제 연결
 
-### Terraform/Terragrunt 랩 설계
+### Terraform/Terragrunt 문서 설계
 
 ```text
-AGENTS.md 기준으로 labs/cloud-aws-terraform-terragrunt 랩을 설계해줘.
-실제 apply는 하지 않고 Terraform module, Terragrunt live 구조, HCL 검증, plan 절차만 작성해줘.
+AGENTS.md 기준으로 docs/terraform-terragrunt-local-validation.md 문서를 설계해줘.
+AWS 없이 Terraform module, Terragrunt live 구조, HCL 검증 절차를 작성해줘.
 ```
 
 기대 산출물:
 
-- 비용 주의 문구
+- AWS 미사용 전제
 - Terraform module 예시
 - `root.hcl` 공통 설정
 - environment별 `terragrunt.hcl`
 - dependency 예시
 - `terragrunt hcl fmt --check` / `terragrunt hcl validate` 검증 절차
-- `terragrunt run plan` 또는 `terragrunt run --all plan` 절차
-- apply/destroy 금지와 승인 조건
+- 비용 없는 provider에서만 plan을 실행한다는 조건
+- apply/destroy 금지와 비용 승인 조건

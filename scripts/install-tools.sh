@@ -13,7 +13,6 @@ TOOLS=(
   argocd
   terraform
   terragrunt
-  aws
 )
 
 BREW_PACKAGES=(
@@ -28,7 +27,6 @@ BREW_PACKAGES=(
   argocd
   terraform
   terragrunt
-  awscli
 )
 
 missing_tools=()
@@ -66,4 +64,5 @@ for package in "${missing_brew_packages[@]}"; do
 done
 
 echo
-echo "Review each tool before installing. AWS, Terraform, and Terragrunt commands can create billable resources when used in cloud labs."
+echo "Review each tool before installing. Terraform and Terragrunt can create billable resources when configured with cloud providers."
+echo "AWS is intentionally excluded from the default local learning toolchain."

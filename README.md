@@ -1,6 +1,6 @@
 # Kubernetes Platform Lab
 
-Kubernetes 플랫폼 엔지니어링 핵심 기술을 로컬 kind/Colima 환경에서 실습하기 위한 학습 저장소입니다. Cilium, Gateway API, GitOps, 정책, 관측성, 오토스케일링, Terraform/Terragrunt, Karpenter까지 운영 관점의 작은 랩으로 나누어 검증 가능한 산출물을 남기는 것을 목표로 합니다.
+Kubernetes 플랫폼 엔지니어링 핵심 기술을 로컬 kind/Colima 환경에서 실습하기 위한 학습 저장소입니다. Cilium, Gateway API, GitOps, 정책, 관측성, 오토스케일링, Terraform/Terragrunt까지 운영 관점의 작은 랩으로 나누어 검증 가능한 산출물을 남기는 것을 목표로 합니다. AWS/EKS/Karpenter는 비용 제약 때문에 실행 실습이 아니라 개념과 설계 관점에서만 다룹니다.
 
 ## 빠른 시작
 
@@ -64,16 +64,16 @@ Chapter 1 문서를 따라 echo 앱을 배포하고 기본 kubectl 루프를 익
 7. `labs/local-cert-manager`
 8. `labs/local-observability`
 9. `labs/local-keda`
-10. `labs/cloud-aws-terraform-terragrunt`
-11. `labs/cloud-aws-karpenter`
+10. `docs/phase-06-autoscaling.md`
+11. Karpenter 개념/설계 문서
 
-Terraform/Terragrunt와 Karpenter는 AWS 비용이 발생할 수 있으므로 로컬 네트워크, GitOps, 정책, 관측성 실습 이후 진행한다.
+AWS/EKS/Karpenter는 비용 제약 때문에 로컬 실행 실습으로 진행하지 않는다. Terraform/Terragrunt는 로컬 또는 비용 없는 static validation 중심으로만 다룬다.
 
 ## 안전 원칙
 
 - kubeconfig, AWS credential, access token, 실제 secret은 저장소에 만들거나 저장하지 않는다.
-- AWS/EKS 비용이 발생할 수 있는 실습은 `labs/cloud-*` 아래에만 둔다.
-- 사용자의 명시적 요청 없이 `terraform apply`, `terragrunt run apply`, AWS 리소스 생성, cluster-wide 삭제 명령을 실행하지 않는다.
+- AWS/EKS/Karpenter 실행 실습은 현재 학습 범위에서 제외한다.
+- 사용자의 명시적 비용 승인 없이 `terraform apply`, `terragrunt run apply`, AWS 리소스 생성, cluster-wide 삭제 명령을 실행하지 않는다.
 - 정리 스크립트는 실습에서 만든 명확한 리소스만 대상으로 한다.
 
 ## 검증 명령
@@ -110,10 +110,9 @@ helm template example ./labs/local-example/charts/example > /tmp/example.yaml
 kubeconform -strict -summary /tmp/example.yaml
 ```
 
-Terragrunt 기반 cloud 랩에서는 HCL 검증과 plan 중심으로 확인한다.
+Terragrunt 기반 IaC 랩에서는 비용 없는 HCL 검증 중심으로 확인한다.
 
 ```bash
 terragrunt hcl fmt --check
 terragrunt hcl validate
-terragrunt run plan
 ```

@@ -98,13 +98,11 @@
 - `/app-a`, `/app-b` 경로가 서로 다른 서비스로 라우팅되어야 한다.
 - 잘못된 route는 status condition으로 실패 원인을 확인할 수 있어야 한다.
 
-## 4. Karpenter
+## 4. Karpenter 개념
 
 학습 대상:
 
 - Karpenter
-- Terraform
-- Terragrunt
 - NodePool
 - EC2NodeClass
 - NodeClaim
@@ -118,32 +116,27 @@
 - pending pod를 기반으로 필요한 노드를 자동 생성하는 흐름을 이해한다.
 - NodePool 요구사항으로 인스턴스 타입, 용량 타입, 아키텍처를 제어한다.
 - consolidation으로 비용 최적화되는 흐름을 관찰한다.
+- AWS 비용 없이 Karpenter를 도입할지 판단할 수 있는 설계 기준을 정리한다.
 
 주의:
 
-- Karpenter 실습은 AWS 비용이 발생할 수 있다.
-- 이 저장소에서는 Karpenter 실습을 `labs/cloud-aws-karpenter`에만 작성한다.
-- 기본 상태에서는 `terraform plan`, `terragrunt run plan` 또는 manifest 작성까지만 수행한다.
-- 실제 `terraform apply`, `terragrunt run apply`와 부하 테스트는 명시적 요청이 있을 때만 안내한다.
+- Karpenter는 AWS/EKS 의존성이 있으므로 현재 학습 환경에서는 실행 실습을 하지 않는다.
+- 이 저장소에서는 Karpenter를 `docs/karpenter-concepts.md` 같은 개념/설계 문서로만 다룬다.
+- NodePool, EC2NodeClass, NodeClaim manifest는 예시로 작성할 수 있지만, 실제 AWS API와 연결되는 설치/적용 절차는 작성하지 않는다.
 
-필수 실습:
+필수 문서화:
 
-- EKS 클러스터 전제 조건 문서화
-- Terraform/Terragrunt 디렉터리 구조 문서화
-- Karpenter Helm chart 설치 manifest 작성
-- NodePool 작성
-- EC2NodeClass 작성
-- pending pod를 만드는 inflate deployment 작성
-- NodeClaim 생성 확인
-- consolidation 설정 확인
-- 리소스 정리 절차 작성
+- Karpenter가 해결하는 문제 정리
+- Cluster Autoscaler와의 차이 정리
+- NodePool, EC2NodeClass, NodeClaim 관계 설명
+- consolidation과 Spot/On-Demand 비용 모델 설명
+- EKS가 없을 때 로컬에서 대체 학습할 수 있는 HPA/KEDA 흐름 연결
 
 검증 기준:
 
-- pending pod가 생기면 NodeClaim이 생성되어야 한다.
-- NodePool 조건에 맞는 노드가 생성되어야 한다.
-- scale down 후 consolidation 이벤트를 확인할 수 있어야 한다.
-- 정리 절차로 노드와 워크로드가 제거되어야 한다.
+- 사용자가 Karpenter의 주요 리소스 관계를 설명할 수 있어야 한다.
+- AWS 비용이 발생하는 실행 단계와 비용 없는 설계 학습 단계를 구분할 수 있어야 한다.
+- HPA/KEDA와 Karpenter가 해결하는 문제가 어떻게 다른지 비교할 수 있어야 한다.
 
 ## 4-1. Terraform/Terragrunt 기반 IaC 운영
 
@@ -155,21 +148,21 @@
 - `terragrunt.stack.hcl`
 - root configuration
 - dependency/dependencies 구성
-- remote state 설계
-- environment별 plan workflow
+- local backend 또는 비용 없는 backend 설계
+- environment별 validation workflow
 
 학습 목표:
 
 - Terraform module과 environment 구성을 분리하는 이유를 이해한다.
 - Terragrunt로 반복되는 backend, provider, input 구성을 줄이는 방식을 이해한다.
-- 여러 unit 또는 stack에 대해 plan 순서와 의존성을 확인할 수 있다.
-- cloud 랩에서 apply 이전에 어떤 변경이 발생하는지 검토하는 습관을 만든다.
+- 여러 unit 또는 stack의 구성 경계와 의존성을 확인할 수 있다.
+- cloud provider 없이도 Terraform/Terragrunt 디렉터리 구조를 검증하는 습관을 만든다.
 
 주의:
 
-- Terragrunt는 Terraform/OpenTofu 실행을 orchestration하므로 AWS 비용 발생 가능성이 있다.
-- 이 저장소의 기본 Terragrunt 실습은 `plan`과 HCL 검증 중심으로 작성한다.
-- 사용자의 명시적 요청 없이 `terragrunt run apply`, `terragrunt run --all apply`, `terragrunt run destroy`, `terragrunt run --all destroy`를 실행 대상으로 작성하지 않는다.
+- Terragrunt는 Terraform/OpenTofu 실행을 orchestration하므로 provider 구성에 따라 비용이 발생할 수 있다.
+- 이 저장소의 기본 Terragrunt 실습은 AWS provider 없이 HCL 검증 중심으로 작성한다.
+- 사용자의 명시적 비용 승인 없이 `terragrunt run apply`, `terragrunt run --all apply`, `terragrunt run destroy`, `terragrunt run --all destroy`를 실행 대상으로 작성하지 않는다.
 
 필수 실습:
 
@@ -179,14 +172,14 @@
 - dependency 또는 dependencies를 사용한 unit 관계 문서화
 - `terragrunt hcl fmt` 실행
 - `terragrunt hcl validate` 실행
-- `terragrunt run plan` 또는 `terragrunt run --all plan`으로 변경사항 확인
+- provider 비용이 없는 예제에서만 `terraform plan` 또는 `terragrunt run plan` 실행
 
 검증 기준:
 
 - Terragrunt HCL 파일이 formatting과 validation을 통과해야 한다.
-- plan 결과에서 생성/변경/삭제 대상과 비용 영향 가능성을 설명할 수 있어야 한다.
+- plan을 실행하는 경우 provider가 비용을 만들지 않는지 설명할 수 있어야 한다.
 - dependency가 있는 unit은 순서와 입력 관계를 문서로 확인할 수 있어야 한다.
-- apply/destroy 명령은 README에서 명시적 주의 문구와 별도 승인 조건을 가져야 한다.
+- apply/destroy 명령은 README에서 명시적 비용 승인 조건을 가져야 한다.
 
 ## 5. Autoscaling
 
@@ -295,7 +288,7 @@
 학습 대상:
 
 - External Secrets Operator
-- AWS Secrets Manager 연동 개념
+- AWS Secrets Manager 연동 개념(문서로만)
 - fake provider 또는 local provider
 - cert-manager
 - SelfSigned Issuer
