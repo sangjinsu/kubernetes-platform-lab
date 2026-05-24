@@ -28,6 +28,7 @@
 │   ├── local-observability
 │   ├── local-hpa
 │   ├── local-keda
+│   ├── cloud-aws-terraform-terragrunt
 │   └── cloud-aws-karpenter
 ├── scripts
 │   ├── create-kind-cluster.sh
@@ -79,7 +80,42 @@ labs/local-example
 - 실습용 이미지는 공식 nginx, curlimages/curl, hashicorp/http-echo 등 검증 쉬운 이미지를 우선한다.
 - Helm values는 기본값 전체 복사 대신 필요한 값만 작성한다.
 - Terraform은 module과 variable을 명확히 분리한다.
+- Terragrunt는 공통 설정과 environment별 unit을 분리하고, 기본 검증은 `plan` 중심으로 작성한다.
 - README에는 실행 순서와 예상 결과를 함께 적는다.
+
+## Terragrunt 랩 표준 구성
+
+Terragrunt를 사용하는 `labs/cloud-*` 디렉터리는 다음 구조를 우선한다.
+
+```text
+labs/cloud-aws-example
+├── README.md
+├── modules
+│   └── example
+├── live
+│   ├── root.hcl
+│   ├── dev
+│   │   └── example
+│   │       └── terragrunt.hcl
+│   └── terragrunt.stack.hcl
+└── scripts
+    ├── validate.sh
+    ├── plan.sh
+    └── cleanup.md
+```
+
+Terragrunt 랩 README는 다음 내용을 반드시 포함한다.
+
+1. 비용 발생 가능성
+2. AWS/EKS 사전 조건
+3. module과 live 디렉터리 역할
+4. `terragrunt.hcl`과 `root.hcl` 관계
+5. dependency 구성
+6. `terragrunt hcl fmt` 또는 CI 검증용 `terragrunt hcl fmt --check`
+7. `terragrunt hcl validate`
+8. `terragrunt run plan` 또는 `terragrunt run --all plan`
+9. apply/destroy를 실행하지 않는 기본 정책
+10. 명시적 승인 후 정리 절차
 
 ## 요청 예시
 
@@ -131,3 +167,21 @@ AGENTS.md 기준으로 labs/cloud-aws-karpenter 랩을 설계해줘.
 - inflate deployment
 - NodeClaim 검증 명령
 - cleanup 순서
+
+### Terraform/Terragrunt 랩 설계
+
+```text
+AGENTS.md 기준으로 labs/cloud-aws-terraform-terragrunt 랩을 설계해줘.
+실제 apply는 하지 않고 Terraform module, Terragrunt live 구조, HCL 검증, plan 절차만 작성해줘.
+```
+
+기대 산출물:
+
+- 비용 주의 문구
+- Terraform module 예시
+- `root.hcl` 공통 설정
+- environment별 `terragrunt.hcl`
+- dependency 예시
+- `terragrunt hcl fmt --check` / `terragrunt hcl validate` 검증 절차
+- `terragrunt run plan` 또는 `terragrunt run --all plan` 절차
+- apply/destroy 금지와 승인 조건

@@ -14,12 +14,12 @@ Codex는 이 문서를 기준으로 다음을 수행한다.
 
 ## 기본 전제
 
-- 사용자는 Kubernetes, Helm, Terraform, EKS, Argo 계열 도구를 학습 및 운영 관점에서 다룬다.
+- 사용자는 Kubernetes, Helm, Terraform, Terragrunt, EKS, Argo 계열 도구를 학습 및 운영 관점에서 다룬다.
 - 로컬 개발 환경은 macOS + Colima + Docker 런타임을 우선한다.
 - 로컬 Kubernetes 실습은 `kind`를 기본으로 한다.
 - 클라우드 실습은 AWS EKS를 기준으로 하되, 비용이 발생하는 작업은 별도 디렉터리로 분리한다.
 - 문서와 설명은 기본적으로 한국어로 작성한다.
-- 코드, YAML, Helm values, Terraform 파일은 영어 이름을 사용한다.
+- 코드, YAML, Helm values, Terraform/Terragrunt 파일은 영어 이름을 사용한다.
 
 ## Codex 작업 원칙
 
@@ -33,5 +33,5 @@ Codex는 작업을 시작하기 전에 항상 다음 순서로 진행한다.
 6. 실습 후 정리 명령을 반드시 제공한다.
 7. 민감 정보, kubeconfig, AWS credential, access token은 절대 커밋하지 않는다.
 8. 비용이 발생할 수 있는 작업은 `labs/cloud-*` 아래에만 작성한다.
-9. `terraform apply`, `kubectl delete` 기반 cluster-wide resource 삭제, 실제 AWS 리소스 생성 명령은 사용자의 명시적 요청 없이는 실행 대상으로 작성하지 않는다.
+9. `terraform apply`, `terragrunt run apply`, `kubectl delete` 기반 cluster-wide resource 삭제, 실제 AWS 리소스 생성 명령은 사용자의 명시적 요청 없이는 실행 대상으로 작성하지 않는다.
 10. 설명만 필요한 경우에는 코드를 과도하게 생성하지 않는다.

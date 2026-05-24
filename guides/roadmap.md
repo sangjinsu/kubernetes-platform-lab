@@ -66,17 +66,19 @@
 - `labs/local-observability`
 - `docs/phase-05-observability.md`
 
-## Phase 6. 오토스케일링과 비용 최적화
+## Phase 6. 오토스케일링, IaC, 비용 최적화
 
 목표:
 
 - HPA, KEDA, Karpenter를 비교한다.
+- Terraform/Terragrunt로 cloud 랩의 IaC 구조를 설계한다.
 - 로컬에서는 HPA/KEDA를 실습하고, AWS에서는 Karpenter를 실습한다.
 
 산출물:
 
 - `labs/local-hpa`
 - `labs/local-keda`
+- `labs/cloud-aws-terraform-terragrunt`
 - `labs/cloud-aws-karpenter`
 - `docs/phase-06-autoscaling.md`
 
@@ -93,9 +95,10 @@
 7. `labs/local-cert-manager`
 8. `labs/local-observability`
 9. `labs/local-keda`
-10. `labs/cloud-aws-karpenter`
+10. `labs/cloud-aws-terraform-terragrunt`
+11. `labs/cloud-aws-karpenter`
 
-Karpenter는 중요하지만 비용과 AWS 의존성이 있으므로 로컬 네트워크, GitOps, 정책, 관측성 실습 이후 진행한다.
+Terraform/Terragrunt와 Karpenter는 중요하지만 비용과 AWS 의존성이 있으므로 로컬 네트워크, GitOps, 정책, 관측성 실습 이후 진행한다.
 
 ## 완료 기준
 
@@ -110,4 +113,5 @@ Karpenter는 중요하지만 비용과 AWS 의존성이 있으므로 로컬 네�
 - External Secrets와 cert-manager의 기본 흐름을 이해하고 실습할 수 있다.
 - Prometheus/Grafana/Loki/OpenTelemetry 기반 관측성 흐름을 구성할 수 있다.
 - HPA/KEDA의 차이를 실습으로 설명할 수 있다.
+- Terraform module과 Terragrunt live 구조를 분리하고 plan 중심으로 검토할 수 있다.
 - Karpenter의 NodePool, EC2NodeClass, NodeClaim 흐름을 설명하고 EKS에서 적용 절차를 설계할 수 있다.

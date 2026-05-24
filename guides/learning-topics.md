@@ -103,6 +103,8 @@
 학습 대상:
 
 - Karpenter
+- Terraform
+- Terragrunt
 - NodePool
 - EC2NodeClass
 - NodeClaim
@@ -121,12 +123,13 @@
 
 - Karpenter 실습은 AWS 비용이 발생할 수 있다.
 - 이 저장소에서는 Karpenter 실습을 `labs/cloud-aws-karpenter`에만 작성한다.
-- 기본 상태에서는 `terraform plan` 또는 manifest 작성까지만 수행한다.
-- 실제 `terraform apply`와 부하 테스트는 명시적 요청이 있을 때만 안내한다.
+- 기본 상태에서는 `terraform plan`, `terragrunt run plan` 또는 manifest 작성까지만 수행한다.
+- 실제 `terraform apply`, `terragrunt run apply`와 부하 테스트는 명시적 요청이 있을 때만 안내한다.
 
 필수 실습:
 
 - EKS 클러스터 전제 조건 문서화
+- Terraform/Terragrunt 디렉터리 구조 문서화
 - Karpenter Helm chart 설치 manifest 작성
 - NodePool 작성
 - EC2NodeClass 작성
@@ -141,6 +144,49 @@
 - NodePool 조건에 맞는 노드가 생성되어야 한다.
 - scale down 후 consolidation 이벤트를 확인할 수 있어야 한다.
 - 정리 절차로 노드와 워크로드가 제거되어야 한다.
+
+## 4-1. Terraform/Terragrunt 기반 IaC 운영
+
+학습 대상:
+
+- Terraform module 구조
+- Terragrunt
+- `terragrunt.hcl`
+- `terragrunt.stack.hcl`
+- root configuration
+- dependency/dependencies 구성
+- remote state 설계
+- environment별 plan workflow
+
+학습 목표:
+
+- Terraform module과 environment 구성을 분리하는 이유를 이해한다.
+- Terragrunt로 반복되는 backend, provider, input 구성을 줄이는 방식을 이해한다.
+- 여러 unit 또는 stack에 대해 plan 순서와 의존성을 확인할 수 있다.
+- cloud 랩에서 apply 이전에 어떤 변경이 발생하는지 검토하는 습관을 만든다.
+
+주의:
+
+- Terragrunt는 Terraform/OpenTofu 실행을 orchestration하므로 AWS 비용 발생 가능성이 있다.
+- 이 저장소의 기본 Terragrunt 실습은 `plan`과 HCL 검증 중심으로 작성한다.
+- 사용자의 명시적 요청 없이 `terragrunt run apply`, `terragrunt run --all apply`, `terragrunt run destroy`, `terragrunt run --all destroy`를 실행 대상으로 작성하지 않는다.
+
+필수 실습:
+
+- `root.hcl` 또는 공통 root configuration 설계
+- environment별 `terragrunt.hcl` 작성
+- module source와 inputs 분리
+- dependency 또는 dependencies를 사용한 unit 관계 문서화
+- `terragrunt hcl fmt` 실행
+- `terragrunt hcl validate` 실행
+- `terragrunt run plan` 또는 `terragrunt run --all plan`으로 변경사항 확인
+
+검증 기준:
+
+- Terragrunt HCL 파일이 formatting과 validation을 통과해야 한다.
+- plan 결과에서 생성/변경/삭제 대상과 비용 영향 가능성을 설명할 수 있어야 한다.
+- dependency가 있는 unit은 순서와 입력 관계를 문서로 확인할 수 있어야 한다.
+- apply/destroy 명령은 README에서 명시적 주의 문구와 별도 승인 조건을 가져야 한다.
 
 ## 5. Autoscaling
 

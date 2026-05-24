@@ -12,6 +12,7 @@ TOOLS=(
   kyverno
   argocd
   terraform
+  terragrunt
   aws
 )
 
@@ -26,6 +27,7 @@ BREW_PACKAGES=(
   kyverno
   argocd
   terraform
+  terragrunt
   awscli
 )
 
@@ -64,4 +66,4 @@ for package in "${missing_brew_packages[@]}"; do
 done
 
 echo
-echo "Review each tool before installing. AWS and Terraform commands can create billable resources when used in cloud labs."
+echo "Review each tool before installing. AWS, Terraform, and Terragrunt commands can create billable resources when used in cloud labs."

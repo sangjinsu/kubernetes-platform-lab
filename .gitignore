@@ -32,6 +32,8 @@ kubeconfig.*
 
 # Terraform local state
 **/.terraform/
+.terragrunt-cache/
+**/.terragrunt-cache/
 *.tfstate
 *.tfstate.*
 crash.log

@@ -15,9 +15,10 @@ Codex는 다음을 하지 않는다.
 
 ## 비용과 AWS 주의
 
-- AWS/EKS/Karpenter 관련 실습은 `labs/cloud-*` 아래에만 작성한다.
-- 기본 흐름은 `terraform plan`, manifest 작성, 검증 절차 문서화까지만 포함한다.
-- 실제 `terraform apply`, 부하 테스트, AWS 리소스 생성은 사용자가 명시적으로 요청한 경우에만 안내한다.
+- AWS/EKS/Terraform/Terragrunt/Karpenter 관련 실습은 `labs/cloud-*` 아래에만 작성한다.
+- 기본 흐름은 `terraform plan`, `terragrunt run plan`, manifest 작성, 검증 절차 문서화까지만 포함한다.
+- 실제 `terraform apply`, `terragrunt run apply`, 부하 테스트, AWS 리소스 생성은 사용자가 명시적으로 요청한 경우에만 안내한다.
+- `terragrunt run --all apply`, `terragrunt run destroy`, `terragrunt run --all destroy`는 기본 튜토리얼 명령으로 작성하지 않는다.
 - cloud 랩 README에는 비용 발생 가능성, 예상 리소스, 정리 순서를 먼저 표시한다.
 - 민감 정보는 환경 변수 또는 외부 secret store를 전제로 설명하고 저장소 파일로 만들지 않는다.
 

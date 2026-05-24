@@ -24,4 +24,10 @@
 - 기본 디렉터리: `apps`, `docs`, `guides`, `labs`, `scripts`, `tests`
 - 테스트 하위 디렉터리: `tests/kubeconform`, `tests/helm`, `tests/kyverno`, `tests/e2e`
 - 스크립트: kind 생성/삭제, 도구 확인, 랩 검증
-- 안전 ignore: OS/editor/temp, kubeconfig, secret, Terraform state
+- 안전 ignore: OS/editor/temp, kubeconfig, secret, Terraform/Terragrunt state/cache
+
+## 후속 반영: Terragrunt
+
+- Terraform cloud 랩과 Karpenter 랩을 확장할 수 있도록 Terragrunt 학습 주제를 추가한다.
+- 기본 검증 명령은 `terragrunt hcl fmt --check`, `terragrunt hcl validate`, `terragrunt run plan`, `terragrunt run --all plan` 중심으로 둔다.
+- `terragrunt run apply`, `terragrunt run --all apply`, `destroy` 계열 명령은 사용자의 명시적 요청 없이는 실행 대상으로 작성하지 않는다.
