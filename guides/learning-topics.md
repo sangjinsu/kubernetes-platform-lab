@@ -117,12 +117,16 @@
 - NodePool 요구사항으로 인스턴스 타입, 용량 타입, 아키텍처를 제어한다.
 - consolidation으로 비용 최적화되는 흐름을 관찰한다.
 - AWS 비용 없이 Karpenter를 도입할지 판단할 수 있는 설계 기준을 정리한다.
+- 명시적 비용 승인 후 AWS EKS에서 제한 실습하는 경우, Karpenter가 실제 EC2 node를 생성하고 정리하는 흐름을 확인한다.
 
 주의:
 
-- Karpenter는 AWS/EKS 의존성이 있으므로 현재 학습 환경에서는 실행 실습을 하지 않는다.
-- 이 저장소에서는 Karpenter를 `docs/karpenter-concepts.md` 같은 개념/설계 문서로만 다룬다.
-- NodePool, EC2NodeClass, NodeClaim manifest는 예시로 작성할 수 있지만, 실제 AWS API와 연결되는 설치/적용 절차는 작성하지 않는다.
+- Karpenter는 AWS/EKS/EC2 의존성이 있으므로 기본 학습 경로에서는 실행 실습을 하지 않는다.
+- Karpenter만 명시적 비용 승인 후 AWS EKS 선택 실습으로 다룰 수 있다.
+- NHN Cloud NKS는 Karpenter 실행 대상이 아니라 managed Kubernetes 비용/삭제 비교 대상으로 다룬다.
+- 이 저장소에서는 Karpenter를 `docs/karpenter-concepts.md` 같은 개념/설계 문서로 먼저 다룬다.
+- NodePool, EC2NodeClass, NodeClaim manifest는 예시로 작성할 수 있지만, 실제 AWS API와 연결되는 설치/적용 절차는 비용 승인 전에는 작성하지 않는다.
+- AWS EKS 선택 실습을 진행했다면 workload 제거, NodeClaim/node 정리 확인, EKS cluster 삭제까지 완료 기준에 포함한다.
 
 필수 문서화:
 
@@ -131,12 +135,14 @@
 - NodePool, EC2NodeClass, NodeClaim 관계 설명
 - consolidation과 Spot/On-Demand 비용 모델 설명
 - EKS가 없을 때 로컬에서 대체 학습할 수 있는 HPA/KEDA 흐름 연결
+- AWS EKS 선택 실습 시 비용 발생 리소스와 cluster 삭제 기준 정리
 
 검증 기준:
 
 - 사용자가 Karpenter의 주요 리소스 관계를 설명할 수 있어야 한다.
 - AWS 비용이 발생하는 실행 단계와 비용 없는 설계 학습 단계를 구분할 수 있어야 한다.
 - HPA/KEDA와 Karpenter가 해결하는 문제가 어떻게 다른지 비교할 수 있어야 한다.
+- AWS EKS 선택 실습을 했다면 Karpenter workload, NodeClaim/node, EKS cluster가 남지 않았는지 확인할 수 있어야 한다.
 
 ## 4-1. Terraform/Terragrunt 기반 IaC 운영
 

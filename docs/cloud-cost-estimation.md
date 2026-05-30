@@ -51,7 +51,7 @@ Terragrunt 자체가 클라우드 환경을 요구하지는 않는다. Terragrun
 | Provider 선택형 | Prometheus, Grafana, Alertmanager, Loki, Tempo | object storage/long-term storage는 선택 | 장기 보관용 object/block storage, managed observability 비용 | 로컬 PVC와 짧은 retention으로 metric/log/trace 흐름 검증 |
 | Provider 선택형 | Velero, VolumeSnapshot | object store와 snapshot provider 필요 | S3/EBS snapshot 등 cloud storage/snapshot 비용 | MinIO 또는 local object storage 기반 namespace backup/restore 학습 |
 | Provider 선택형 | Terraform/Terragrunt | 사용하는 provider에 따라 달라짐 | EKS/NKS/VPC/LB/storage provider resource 생성 시 비용 | local backend, 비용 없는 provider, HCL formatting/validation 중심 |
-| Cloud 의존 | Karpenter, NodePool, EC2NodeClass, NodeClaim | AWS provider/EKS/EC2 의존 | EC2 instance, EBS, Public IPv4, data transfer, EKS 비용 | 실행 실습 제외. 개념, manifest 예시, HPA/KEDA와 역할 비교만 문서화 |
+| AWS EKS 선택 실습 | Karpenter, NodePool, EC2NodeClass, NodeClaim | AWS provider/EKS/EC2 의존 | EKS control plane, EC2 instance, EBS, Public IPv4, data transfer, Load Balancer 가능성 | 기본은 문서/설계 학습. 명시적 비용 승인 후 AWS EKS에서만 제한 실습 |
 | Cloud 의존 | EKS/NKS managed cluster | AWS 또는 NHN Cloud provider 필요 | control plane, worker node, storage, LB/IP/network 비용 | 비용 산정과 운영 판단 기준만 문서화 |
 | Cloud 의존 | cloud Load Balancer, NAT Gateway, Public IPv4/Floating IP | cloud networking provider 필요 | LB-hour, LCU/NLCU, NAT-hour/data, IP-hour 비용 | 로컬 NodePort/port-forward/host network로 대체 |
 
@@ -61,6 +61,7 @@ Terragrunt 자체가 클라우드 환경을 요구하지는 않는다. Terragrun
 - 외부 secret store, DNS, object storage, snapshot, cloud Load Balancer가 필요한 기능은 provider 선택형으로 둔다.
 - cloud API가 실제 compute/network/storage를 만드는 기술은 비용 승인 전까지 실행하지 않는다.
 - Karpenter는 단순 controller 설치보다 EC2 node provisioning이 핵심이므로 이 프로젝트에서 가장 강한 비용 경계가 필요한 기술이다.
+- Karpenter의 실제 클라우드 실습 대상은 AWS EKS로 한정한다. NHN Cloud NKS는 Karpenter 실행 대상이 아니라 비용 비교와 cluster 삭제 전략 대상으로 둔다.
 - Terraform/Terragrunt는 cloud provider를 선택하기 전까지는 구조 학습 도구로 보고, provider resource 생성 단계부터 비용 리스크로 본다.
 
 ## 월 예상 비용 요약
@@ -121,6 +122,7 @@ Terragrunt 자체가 클라우드 환경을 요구하지는 않는다. Terragrun
 3. Public IPv4, Load Balancer, NAT Gateway를 만들지 않는 private-only 실습을 우선한다.
 4. 관측성 stack은 로컬에서 먼저 검증하고, 클라우드에서는 로그 보관 기간과 volume 크기를 작게 시작한다.
 5. Karpenter/cluster autoscaling은 실제 cloud API를 연결하기 전에 문서 설계와 로컬 HPA/KEDA 실습으로 대체한다.
+6. Karpenter 실제 동작 확인이 꼭 필요하면 명시적 비용 승인 후 AWS EKS에서만 제한 실습하고, 학습 후 cluster를 삭제한다.
 
 ## 학습하지 않을 때 절약 전략
 
@@ -150,8 +152,11 @@ NHN Cloud NKS 문서의 클러스터 오토스케일러 설정은 최소 노드 
 
 - 로컬 학습은 kind/Colima cluster를 만들고 실습 후 삭제한다.
 - Terragrunt는 cloud provider 없이 local validation 중심으로 학습한다.
+- Karpenter만 명시적 비용 승인 후 AWS EKS 선택 실습으로 다룰 수 있다.
+- NHN Cloud NKS는 Karpenter 실행 대상이 아니라 비용 비교와 cluster 삭제 전략 문서로 다룬다.
 - EKS/NKS 실험은 비용 승인 전까지 문서 설계와 비용 산정으로 제한한다.
 - cloud cluster를 실제로 만들었다면 “잠시 쉬기”는 worker 축소, “장기간 중단”은 cluster 삭제를 기준으로 판단한다.
+- Karpenter AWS EKS 선택 실습의 완료 기준은 workload 제거, NodeClaim/node 정리 확인, EKS cluster 삭제다.
 
 ## 출처
 
@@ -166,7 +171,9 @@ NHN Cloud NKS 문서의 클러스터 오토스케일러 설정은 최소 노드 
 - Amazon EKS managed node groups: https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html
 - Amazon EKS NodegroupScalingConfig: https://docs.aws.amazon.com/eks/latest/APIReference/API_NodegroupScalingConfig.html
 - Karpenter NodeClasses: https://karpenter.sh/docs/concepts/nodeclasses/
+- Karpenter Getting Started: https://karpenter.sh/docs/getting-started/
 - AWS EKS Karpenter best practices: https://docs.aws.amazon.com/eks/latest/best-practices/karpenter.html
+- AWS EKS autoscaling: https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html
 - Amazon EC2 On-Demand pricing: https://aws.amazon.com/ec2/pricing/on-demand/
 - Amazon EBS pricing: https://aws.amazon.com/ebs/pricing/
 - Amazon VPC pricing: https://aws.amazon.com/vpc/pricing/

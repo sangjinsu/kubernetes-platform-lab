@@ -9,6 +9,18 @@
 ├── apps
 │   ├── echo
 │   └── sample-api
+├── chapters
+│   ├── README.md
+│   ├── ch01-local-kubernetes
+│   ├── ch02-cilium-networking
+│   ├── ch03-gateway-api
+│   ├── ch04-gitops-delivery
+│   ├── ch05-policy-security
+│   ├── ch06-secrets-certificates
+│   ├── ch07-observability
+│   ├── ch08-autoscaling
+│   ├── ch09-terraform-terragrunt
+│   └── ch10-karpenter
 ├── docs
 │   ├── phase-01-local-kubernetes.md
 │   ├── phase-02-networking.md
@@ -39,6 +51,28 @@
     ├── kyverno
     └── e2e
 ```
+
+## 챕터 폴더 표준 구성
+
+`chapters/*`는 학습 순서별 진입점이다. 기존 `docs/`, `labs/`, `apps/`, `tests/` 자산은 이동하지 않고 챕터 README에서 연결한다.
+
+각 `chapters/chXX-topic/README.md`는 다음 순서를 따른다.
+
+1. 목표
+2. 학습 대상
+3. 기존 자료
+4. 실습 방식
+5. 검증 기준
+6. 정리 기준
+7. 다음 챕터
+
+챕터 README 작성 기준:
+
+- 로컬 실습은 kind cluster 생성과 삭제를 정리 기준에 포함한다.
+- 아직 lab이 없으면 예정 경로를 code span으로 표시한다.
+- 실제 파일이 있으면 Markdown 링크로 연결한다.
+- cloud provider가 필요한 주제는 비용 영향과 대체 로컬 학습 경로를 먼저 설명한다.
+- Karpenter는 기본 문서 학습으로 두고, 명시적 비용 승인 후 AWS EKS 선택 실습과 cluster 삭제 기준을 별도 섹션으로만 다룬다.
 
 ## 각 랩의 표준 구성
 
@@ -153,18 +187,20 @@ Cilium Gateway API를 사용하고 /app-a, /app-b path routing 테스트를 포�
 
 ```text
 AGENTS.md 기준으로 docs/karpenter-concepts.md 문서를 설계해줘.
-AWS 실행 없이 Karpenter 개념, NodePool, EC2NodeClass, NodeClaim, HPA/KEDA와의 차이를 정리해줘.
+기본은 AWS 실행 없이 Karpenter 개념, NodePool, EC2NodeClass, NodeClaim, HPA/KEDA와의 차이를 정리해줘.
+명시적 비용 승인 후에만 AWS EKS 선택 실습과 cluster 삭제 완료 기준을 별도 섹션으로 다뤄줘.
 ```
 
 기대 산출물:
 
-- AWS 비용 제약 문구
+- AWS 비용 제약 문구와 비용 승인 조건
 - Karpenter가 해결하는 문제
 - Cluster Autoscaler와의 차이
 - NodePool / EC2NodeClass / NodeClaim 관계
 - consolidation과 비용 최적화 개념
 - HPA/KEDA와의 역할 비교
 - 로컬에서 대체로 실습할 수 있는 주제 연결
+- AWS EKS 선택 실습 시 workload 제거, NodeClaim/node 정리 확인, EKS cluster 삭제 기준
 
 ### Terraform/Terragrunt 문서 설계
 

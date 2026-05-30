@@ -71,7 +71,8 @@
 목표:
 
 - HPA와 KEDA를 로컬에서 실습한다.
-- Karpenter는 AWS 비용 제약 때문에 개념과 설계 관점으로만 비교한다.
+- Karpenter는 AWS 비용 제약 때문에 기본적으로 개념과 설계 관점으로 비교한다.
+- Karpenter만 명시적 비용 승인 후 AWS EKS 선택 실습으로 다룰 수 있다.
 - Terraform/Terragrunt는 비용 없는 validation 중심으로 IaC 구조를 학습한다.
 
 산출물:
@@ -98,7 +99,7 @@
 10. `docs/terraform-terragrunt-local-validation.md`
 11. `docs/karpenter-concepts.md`
 
-AWS/EKS/Karpenter는 비용 제약 때문에 실행 실습으로 진행하지 않는다. Karpenter는 로컬 실습 이후 개념과 설계 판단 기준으로만 학습한다.
+AWS/EKS/NHN Cloud 실행 실습은 비용 제약 때문에 기본 경로로 진행하지 않는다. Karpenter는 로컬 실습 이후 개념과 설계 판단 기준으로 먼저 학습하고, 실제 node provisioning 확인이 필요할 때만 명시적 비용 승인 후 AWS EKS 선택 실습으로 다룬다.
 
 ## 완료 기준
 
@@ -115,3 +116,4 @@ AWS/EKS/Karpenter는 비용 제약 때문에 실행 실습으로 진행하지 �
 - HPA/KEDA의 차이를 실습으로 설명할 수 있다.
 - Terraform module과 Terragrunt live 구조를 분리하고 static validation 중심으로 검토할 수 있다.
 - Karpenter의 NodePool, EC2NodeClass, NodeClaim 개념을 설명하고 AWS 비용이 없는 대체 학습 경로를 선택할 수 있다.
+- Karpenter AWS EKS 선택 실습을 했다면 학습 후 EKS cluster 삭제까지 완료할 수 있다.
